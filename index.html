@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Tic-Tac-Toe</title>
+  <title>Tic-Tac-Toe 5×5</title>
   <style>
     /* ─── CSS Custom Properties ─────────────────────────────────── */
     :root {
@@ -52,24 +52,25 @@
       flex-direction: column;
       align-items: center;
       justify-content: flex-start;
-      padding: 24px 16px 48px;
+      padding: 20px 12px 48px;
       transition: background var(--transition), color var(--transition);
     }
 
     /* ─── Header ────────────────────────────────────────────────── */
     header {
       width: 100%;
-      max-width: 480px;
+      max-width: 540px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 20px;
+      margin-bottom: 16px;
     }
     header h1 {
-      font-size: 1.6rem;
+      font-size: 1.5rem;
       font-weight: 800;
       letter-spacing: -0.5px;
     }
+    header h1 span { font-size: .85rem; color: var(--muted); font-weight: 500; margin-left: 6px; }
     .header-actions { display: flex; gap: 8px; }
     .icon-btn {
       background: var(--surface);
@@ -90,16 +91,16 @@
       border: 1.5px solid var(--border);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
-      padding: 28px 24px 24px;
+      padding: 22px 20px 20px;
       width: 100%;
-      max-width: 480px;
+      max-width: 540px;
     }
 
     /* ─── Player Names ──────────────────────────────────────────── */
     .player-names {
       display: flex;
       gap: 10px;
-      margin-bottom: 18px;
+      margin-bottom: 14px;
     }
     .name-group {
       flex: 1;
@@ -108,7 +109,7 @@
       gap: 4px;
     }
     .name-group label {
-      font-size: .75rem;
+      font-size: .72rem;
       font-weight: 600;
       color: var(--muted);
       text-transform: uppercase;
@@ -121,8 +122,8 @@
       border: 1.5px solid var(--border);
       border-radius: 8px;
       color: var(--text);
-      font-size: .9rem;
-      padding: 7px 10px;
+      font-size: .88rem;
+      padding: 6px 10px;
       outline: none;
       transition: border-color var(--transition);
       width: 100%;
@@ -135,25 +136,25 @@
       align-items: center;
       justify-content: space-between;
       gap: 10px;
-      margin-bottom: 18px;
+      margin-bottom: 14px;
       flex-wrap: wrap;
     }
-    .options-row label { font-size: .85rem; color: var(--muted); }
+    .options-row label { font-size: .82rem; color: var(--muted); }
     select {
       background: var(--bg);
       border: 1.5px solid var(--border);
       border-radius: 8px;
       color: var(--text);
-      font-size: .85rem;
-      padding: 6px 10px;
+      font-size: .82rem;
+      padding: 5px 9px;
       outline: none;
       cursor: pointer;
     }
+
     /* ─── Toggle Switch ─────────────────────────────────────────── */
     .toggle-wrap { display: flex; align-items: center; gap: 7px; }
     .toggle {
-      position: relative; width: 38px; height: 21px;
-      flex-shrink: 0;
+      position: relative; width: 38px; height: 21px; flex-shrink: 0;
     }
     .toggle input { opacity: 0; width: 0; height: 0; position: absolute; }
     .toggle-slider {
@@ -178,37 +179,37 @@
     /* ─── Status Bar ────────────────────────────────────────────── */
     .status-bar {
       text-align: center;
-      font-size: 1.05rem;
+      font-size: 1rem;
       font-weight: 600;
-      min-height: 32px;
-      margin-bottom: 18px;
-      padding: 6px 0;
+      min-height: 30px;
+      margin-bottom: 14px;
+      padding: 5px 0;
       border-radius: 8px;
       transition: background .3s, color .3s;
     }
     .status-bar.x-turn  { color: var(--x-color); }
     .status-bar.o-turn  { color: var(--o-color); }
-    .status-bar.result  { background: var(--win-bg); font-size: 1.15rem; }
+    .status-bar.result  { background: var(--win-bg); font-size: 1.08rem; }
 
     /* ─── Board ─────────────────────────────────────────────────── */
     .board {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-      margin-bottom: 22px;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 7px;
+      margin-bottom: 18px;
     }
     .cell {
       aspect-ratio: 1;
       background: var(--bg);
       border: 2px solid var(--border);
-      border-radius: 10px;
+      border-radius: 9px;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: clamp(2rem, 10vw, 3.2rem);
+      font-size: clamp(1.3rem, 6vw, 2.1rem);
       font-weight: 900;
-      transition: background var(--transition), transform .12s, border-color var(--transition);
+      transition: background var(--transition), transform .1s, border-color var(--transition);
       user-select: none;
       position: relative;
       overflow: hidden;
@@ -225,7 +226,14 @@
       border-color: #facc15;
       animation: pulse 0.6s ease infinite alternate;
     }
-    /* Pop-in animation for placed marks */
+    /* AI thinking shimmer */
+    .cell.thinking {
+      animation: shimmer 0.8s ease infinite alternate;
+    }
+    @keyframes shimmer {
+      from { background: var(--bg); }
+      to   { background: var(--cell-hover); }
+    }
     @keyframes popIn {
       0%   { transform: scale(0) rotate(-10deg); opacity: 0; }
       70%  { transform: scale(1.15) rotate(3deg); }
@@ -234,7 +242,18 @@
     .cell.pop { animation: popIn .22s cubic-bezier(.34,1.56,.64,1) forwards; }
     @keyframes pulse {
       from { transform: scale(1); }
-      to   { transform: scale(1.05); }
+      to   { transform: scale(1.06); }
+    }
+
+    /* ─── AI thinking indicator ─────────────────────────────────── */
+    .ai-thinking {
+      text-align: center;
+      font-size: .78rem;
+      color: var(--o-color);
+      font-weight: 600;
+      min-height: 18px;
+      margin-bottom: 6px;
+      letter-spacing: .04em;
     }
 
     /* ─── Score Bar ─────────────────────────────────────────────── */
@@ -242,7 +261,7 @@
       display: flex;
       justify-content: space-around;
       gap: 8px;
-      margin-bottom: 18px;
+      margin-bottom: 14px;
     }
     .score-item {
       flex: 1;
@@ -250,10 +269,10 @@
       background: var(--bg);
       border: 1.5px solid var(--border);
       border-radius: 10px;
-      padding: 10px 6px;
+      padding: 8px 6px;
     }
     .score-item .score-label {
-      font-size: .7rem;
+      font-size: .68rem;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: .07em;
@@ -262,10 +281,7 @@
     }
     .score-item.x .score-label { color: var(--x-color); }
     .score-item.o .score-label { color: var(--o-color); }
-    .score-item .score-val {
-      font-size: 1.5rem;
-      font-weight: 800;
-    }
+    .score-item .score-val { font-size: 1.4rem; font-weight: 800; }
     .score-item.x .score-val { color: var(--x-color); }
     .score-item.o .score-val { color: var(--o-color); }
 
@@ -273,10 +289,10 @@
     .btn-row { display: flex; gap: 10px; }
     .btn {
       flex: 1;
-      padding: 10px 14px;
+      padding: 9px 12px;
       border: none;
       border-radius: 9px;
-      font-size: .9rem;
+      font-size: .88rem;
       font-weight: 700;
       cursor: pointer;
       transition: background var(--transition), transform .1s;
@@ -287,30 +303,36 @@
     .btn-danger  { background: var(--btn-danger); color: #fff; }
     .btn-danger:hover  { background: var(--btn-danger-hover); }
 
-    /* ─── Current-player indicator dots ────────────────────────── */
+    /* ─── Current-player indicators ─────────────────────────────── */
     .turn-indicator {
       display: flex;
       justify-content: center;
       gap: 16px;
-      margin-bottom: 14px;
+      margin-bottom: 10px;
     }
     .indicator {
       display: flex; align-items: center; gap: 6px;
-      font-size: .82rem; font-weight: 600;
-      opacity: .35; transition: opacity .3s;
+      font-size: .80rem; font-weight: 600;
+      opacity: .32; transition: opacity .3s;
     }
     .indicator.active { opacity: 1; }
-    .dot {
-      width: 10px; height: 10px;
-      border-radius: 50%;
-    }
+    .dot { width: 10px; height: 10px; border-radius: 50%; }
     .indicator.x .dot { background: var(--x-color); }
     .indicator.o .dot { background: var(--o-color); }
 
+    /* ─── Win-condition note ─────────────────────────────────────── */
+    .win-note {
+      text-align: center;
+      font-size: .72rem;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+
     /* ─── Responsive ────────────────────────────────────────────── */
-    @media (max-width: 400px) {
-      .card { padding: 18px 12px 16px; }
+    @media (max-width: 420px) {
+      .card { padding: 14px 10px 14px; }
       .player-names { flex-direction: column; }
+      .board { gap: 5px; }
     }
   </style>
 </head>
@@ -318,12 +340,10 @@
 
 <!-- ─── Header ─────────────────────────────────────────────────── -->
 <header>
-  <h1>Tic‑Tac‑Toe</h1>
+  <h1>Tic‑Tac‑Toe <span>5×5</span></h1>
   <div class="header-actions">
-    <!-- Mute toggle -->
-    <button class="icon-btn" id="muteBtn" title="Toggle sound" aria-label="Toggle sound">🔊</button>
-    <!-- Theme toggle -->
-    <button class="icon-btn" id="themeBtn" title="Toggle theme" aria-label="Toggle theme">🌙</button>
+    <button class="icon-btn" id="muteBtn"  title="Toggle sound"  aria-label="Toggle sound">🔊</button>
+    <button class="icon-btn" id="themeBtn" title="Toggle theme"  aria-label="Toggle theme">🌙</button>
   </div>
 </header>
 
@@ -344,7 +364,6 @@
 
   <!-- Options row -->
   <div class="options-row">
-    <!-- Who goes first -->
     <div style="display:flex;align-items:center;gap:8px;">
       <label for="firstPlayer">Starts:</label>
       <select id="firstPlayer">
@@ -353,7 +372,6 @@
       </select>
     </div>
 
-    <!-- AI toggle -->
     <div class="toggle-wrap">
       <label for="aiToggle">AI Opponent</label>
       <label class="toggle">
@@ -362,18 +380,17 @@
       </label>
     </div>
 
-    <!-- AI difficulty (hidden until AI enabled) -->
     <div id="diffWrap" style="display:none;align-items:center;gap:8px;" class="toggle-wrap">
       <label for="difficulty">Level:</label>
       <select id="difficulty">
         <option value="easy">Easy</option>
-        <option value="medium" selected>Medium</option>
-        <option value="hard">Hard</option>
+        <option value="medium">Medium</option>
+        <option value="hard" selected>Hard</option>
       </select>
     </div>
   </div>
 
-  <!-- Current-player indicators -->
+  <!-- Turn indicators -->
   <div class="turn-indicator">
     <div class="indicator x active" id="indX">
       <div class="dot"></div>
@@ -390,8 +407,14 @@
     Player X's turn
   </div>
 
-  <!-- 3×3 Board -->
-  <div class="board" id="board" role="grid" aria-label="Tic-Tac-Toe board">
+  <!-- Win condition hint -->
+  <div class="win-note">Get <strong>4 in a row</strong> to win</div>
+
+  <!-- AI thinking indicator -->
+  <div class="ai-thinking" id="aiThinking"></div>
+
+  <!-- 5×5 Board -->
+  <div class="board" id="board" role="grid" aria-label="Tic-Tac-Toe 5x5 board">
     <!-- cells injected by JS -->
   </div>
 
@@ -399,15 +422,15 @@
   <div class="score-bar">
     <div class="score-item x">
       <div class="score-label" id="scoreXLabel">Player X</div>
-      <div class="score-val" id="scoreX">0</div>
+      <div class="score-val"   id="scoreX">0</div>
     </div>
     <div class="score-item">
       <div class="score-label">Draws</div>
-      <div class="score-val" id="scoreD">0</div>
+      <div class="score-val"   id="scoreD">0</div>
     </div>
     <div class="score-item o">
       <div class="score-label" id="scoreOLabel">Player O</div>
-      <div class="score-val" id="scoreO">0</div>
+      <div class="score-val"   id="scoreO">0</div>
     </div>
   </div>
 
@@ -421,130 +444,143 @@
 
 <script>
 /* ═══════════════════════════════════════════════════════════════
-   Tic-Tac-Toe — Vanilla JS
+   Tic-Tac-Toe 5×5 — 4-in-a-row wins — Heuristic AI
    ═══════════════════════════════════════════════════════════════ */
 
-/* ─── Constants ─────────────────────────────────────────────── */
-const WIN_LINES = [
-  [0,1,2],[3,4,5],[6,7,8],   // rows
-  [0,3,6],[1,4,7],[2,5,8],   // cols
-  [0,4,8],[2,4,6]            // diagonals
-];
+const BOARD_SIZE = 5;       // 5×5
+const WIN_LENGTH = 4;       // need 4 in a row
+const CELLS      = BOARD_SIZE * BOARD_SIZE; // 25
+
+/* ─── Generate all winning lines (rows, cols, diagonals ≥4) ─── */
+const WIN_LINES = (() => {
+  const lines = [];
+  // rows
+  for (let r = 0; r < BOARD_SIZE; r++) {
+    for (let c = 0; c <= BOARD_SIZE - WIN_LENGTH; c++) {
+      lines.push(Array.from({length: WIN_LENGTH}, (_, k) => r * BOARD_SIZE + c + k));
+    }
+  }
+  // cols
+  for (let c = 0; c < BOARD_SIZE; c++) {
+    for (let r = 0; r <= BOARD_SIZE - WIN_LENGTH; r++) {
+      lines.push(Array.from({length: WIN_LENGTH}, (_, k) => (r + k) * BOARD_SIZE + c));
+    }
+  }
+  // diagonals (top-left to bottom-right)
+  for (let r = 0; r <= BOARD_SIZE - WIN_LENGTH; r++) {
+    for (let c = 0; c <= BOARD_SIZE - WIN_LENGTH; c++) {
+      lines.push(Array.from({length: WIN_LENGTH}, (_, k) => (r + k) * BOARD_SIZE + (c + k)));
+    }
+  }
+  // diagonals (top-right to bottom-left)
+  for (let r = 0; r <= BOARD_SIZE - WIN_LENGTH; r++) {
+    for (let c = WIN_LENGTH - 1; c < BOARD_SIZE; c++) {
+      lines.push(Array.from({length: WIN_LENGTH}, (_, k) => (r + k) * BOARD_SIZE + (c - k)));
+    }
+  }
+  return lines;
+})();
+
+/* ─── Cell-line index: which lines pass through each cell ──── */
+const CELL_LINES = Array.from({length: CELLS}, () => []);
+WIN_LINES.forEach((line, li) => line.forEach(ci => CELL_LINES[ci].push(li)));
 
 /* ─── State ──────────────────────────────────────────────────── */
-let board       = Array(9).fill(null); // null | 'X' | 'O'
-let currentTurn = 'X';
-let gameOver    = false;
-let scores      = { X: 0, O: 0, D: 0 };
-let muted       = false;
-let aiEnabled   = false;
-let aiDifficulty = 'medium';
-// Which symbol the AI plays (always O when AI is on)
-const AI_MARK = 'O';
+let board        = Array(CELLS).fill(null);
+let currentTurn  = 'X';
+let gameOver     = false;
+let scores       = { X: 0, O: 0, D: 0 };
+let muted        = false;
+let aiEnabled    = false;
+let aiDifficulty = 'hard';
+const AI_MARK    = 'O';
 
 /* ─── DOM refs ───────────────────────────────────────────────── */
-const boardEl       = document.getElementById('board');
-const statusEl      = document.getElementById('status');
-const scoreXEl      = document.getElementById('scoreX');
-const scoreOEl      = document.getElementById('scoreO');
-const scoreDEl      = document.getElementById('scoreD');
-const scoreXLabel   = document.getElementById('scoreXLabel');
-const scoreOLabel   = document.getElementById('scoreOLabel');
-const resetBtn      = document.getElementById('resetBtn');
-const resetScoresBtn= document.getElementById('resetScoresBtn');
-const nameXInput    = document.getElementById('nameX');
-const nameOInput    = document.getElementById('nameO');
-const firstPlayerSel= document.getElementById('firstPlayer');
-const aiToggle      = document.getElementById('aiToggle');
-const diffWrap      = document.getElementById('diffWrap');
-const difficultySel = document.getElementById('difficulty');
-const muteBtn       = document.getElementById('muteBtn');
-const themeBtn      = document.getElementById('themeBtn');
-const indX          = document.getElementById('indX');
-const indO          = document.getElementById('indO');
-const indNameX      = document.getElementById('indNameX');
-const indNameO      = document.getElementById('indNameO');
+const boardEl        = document.getElementById('board');
+const statusEl       = document.getElementById('status');
+const aiThinkingEl   = document.getElementById('aiThinking');
+const scoreXEl       = document.getElementById('scoreX');
+const scoreOEl       = document.getElementById('scoreO');
+const scoreDEl       = document.getElementById('scoreD');
+const scoreXLabel    = document.getElementById('scoreXLabel');
+const scoreOLabel    = document.getElementById('scoreOLabel');
+const resetBtn       = document.getElementById('resetBtn');
+const resetScoresBtn = document.getElementById('resetScoresBtn');
+const nameXInput     = document.getElementById('nameX');
+const nameOInput     = document.getElementById('nameO');
+const firstPlayerSel = document.getElementById('firstPlayer');
+const aiToggle       = document.getElementById('aiToggle');
+const diffWrap       = document.getElementById('diffWrap');
+const difficultySel  = document.getElementById('difficulty');
+const muteBtn        = document.getElementById('muteBtn');
+const themeBtn       = document.getElementById('themeBtn');
+const indX           = document.getElementById('indX');
+const indO           = document.getElementById('indO');
+const indNameX       = document.getElementById('indNameX');
+const indNameO       = document.getElementById('indNameO');
 
-/* ─── Audio (Web Audio API) ──────────────────────────────────── */
+/* ─── Audio ──────────────────────────────────────────────────── */
 let audioCtx = null;
 function getAudioCtx() {
   if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
   return audioCtx;
 }
-/**
- * Play a short beep.
- * @param {number} freq  - frequency in Hz
- * @param {number} dur   - duration in seconds
- * @param {'sine'|'square'|'triangle'} type
- */
 function beep(freq = 440, dur = 0.1, type = 'sine') {
   if (muted) return;
   try {
-    const ctx = getAudioCtx();
-    const osc = ctx.createOscillator();
+    const ctx  = getAudioCtx();
+    const osc  = ctx.createOscillator();
     const gain = ctx.createGain();
-    osc.connect(gain);
-    gain.connect(ctx.destination);
+    osc.connect(gain); gain.connect(ctx.destination);
     osc.type = type;
     osc.frequency.setValueAtTime(freq, ctx.currentTime);
-    gain.gain.setValueAtTime(0.18, ctx.currentTime);
+    gain.gain.setValueAtTime(0.16, ctx.currentTime);
     gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + dur);
-    osc.start(ctx.currentTime);
-    osc.stop(ctx.currentTime + dur);
-  } catch (e) { /* silently ignore if audio not available */ }
+    osc.start(ctx.currentTime); osc.stop(ctx.currentTime + dur);
+  } catch(e) {}
 }
-function playPlace()  { beep(520, 0.08, 'sine'); }
-function playWin()    {
+function playPlace() { beep(520, 0.08, 'sine'); }
+function playWin()   {
   beep(523, 0.12, 'sine');
   setTimeout(() => beep(659, 0.12, 'sine'), 120);
   setTimeout(() => beep(784, 0.18, 'sine'), 240);
 }
-function playDraw()   { beep(300, 0.3, 'triangle'); }
+function playDraw()  { beep(300, 0.3, 'triangle'); }
 
-/* ─── localStorage Persistence ──────────────────────────────── */
-const LS_SCORES = 'ttt_scores';
-const LS_THEME  = 'ttt_theme';
-const LS_MUTED  = 'ttt_muted';
-const LS_NAMES  = 'ttt_names';
+/* ─── localStorage ───────────────────────────────────────────── */
+const LS_SCORES = 'ttt5_scores';
+const LS_THEME  = 'ttt5_theme';
+const LS_MUTED  = 'ttt5_muted';
+const LS_NAMES  = 'ttt5_names';
 
-function saveScores()  { localStorage.setItem(LS_SCORES, JSON.stringify(scores)); }
-function loadScores()  {
-  try {
-    const s = JSON.parse(localStorage.getItem(LS_SCORES));
-    if (s && typeof s.X === 'number') scores = s;
-  } catch(e) {}
+function saveScores() { localStorage.setItem(LS_SCORES, JSON.stringify(scores)); }
+function loadScores() {
+  try { const s = JSON.parse(localStorage.getItem(LS_SCORES)); if (s && typeof s.X === 'number') scores = s; } catch(e) {}
 }
-function saveNames()   { localStorage.setItem(LS_NAMES, JSON.stringify({ X: nameXInput.value, O: nameOInput.value })); }
-function loadNames()   {
-  try {
-    const n = JSON.parse(localStorage.getItem(LS_NAMES));
-    if (n) {
-      if (n.X) nameXInput.value = n.X;
-      if (n.O) nameOInput.value = n.O;
-    }
-  } catch(e) {}
+function saveNames()  { localStorage.setItem(LS_NAMES, JSON.stringify({ X: nameXInput.value, O: nameOInput.value })); }
+function loadNames()  {
+  try { const n = JSON.parse(localStorage.getItem(LS_NAMES)); if (n) { if (n.X) nameXInput.value = n.X; if (n.O) nameOInput.value = n.O; } } catch(e) {}
 }
-function loadTheme()   {
+function loadTheme()  {
   const t = localStorage.getItem(LS_THEME) || 'light';
   document.documentElement.setAttribute('data-theme', t);
   themeBtn.textContent = t === 'dark' ? '☀️' : '🌙';
 }
-function loadMuted()   {
+function loadMuted()  {
   muted = localStorage.getItem(LS_MUTED) === '1';
   muteBtn.textContent = muted ? '🔇' : '🔊';
 }
 
-/* ─── Helper: get player name ────────────────────────────────── */
+/* ─── Helpers ────────────────────────────────────────────────── */
 function name(mark) {
-  return mark === 'X'
-    ? (nameXInput.value.trim() || 'Player X')
-    : (nameOInput.value.trim() || 'Player O');
+  return mark === 'X' ? (nameXInput.value.trim() || 'Player X') : (nameOInput.value.trim() || 'Player O');
 }
+function emptyIndices(b) { return b.map((v,i) => v === null ? i : -1).filter(i => i !== -1); }
 
 /* ─── Build Board DOM ────────────────────────────────────────── */
 function buildBoard() {
   boardEl.innerHTML = '';
-  for (let i = 0; i < 9; i++) {
+  for (let i = 0; i < CELLS; i++) {
     const cell = document.createElement('div');
     cell.className = 'cell';
     cell.setAttribute('role', 'gridcell');
@@ -559,11 +595,10 @@ function buildBoard() {
 function renderBoard(animateIndex = -1) {
   const cells = boardEl.querySelectorAll('.cell');
   cells.forEach((cell, i) => {
-    cell.textContent  = board[i] || '';
-    cell.className    = 'cell' + (board[i] ? ` taken ${board[i].toLowerCase()}` : '');
+    cell.textContent = board[i] || '';
+    cell.className   = 'cell' + (board[i] ? ` taken ${board[i].toLowerCase()}` : '');
     if (gameOver) cell.classList.add('game-over');
     if (i === animateIndex) {
-      // Force reflow so the animation re-triggers
       cell.classList.remove('pop');
       void cell.offsetWidth;
       cell.classList.add('pop');
@@ -577,21 +612,17 @@ function highlightWin(line) {
   line.forEach(i => cells[i].classList.add('winning'));
 }
 
-/* ─── Update Status Bar ──────────────────────────────────────── */
+/* ─── UI Updates ─────────────────────────────────────────────── */
 function updateStatus(msg, cls = '') {
   statusEl.textContent = msg;
   statusEl.className   = `status-bar ${cls}`;
 }
-
-/* ─── Update Turn Indicators ─────────────────────────────────── */
 function updateIndicators() {
   indX.classList.toggle('active', currentTurn === 'X');
   indO.classList.toggle('active', currentTurn === 'O');
   indNameX.textContent = name('X');
   indNameO.textContent = name('O');
 }
-
-/* ─── Update Score Display ───────────────────────────────────── */
 function renderScores() {
   scoreXEl.textContent    = scores.X;
   scoreOEl.textContent    = scores.O;
@@ -599,28 +630,27 @@ function renderScores() {
   scoreXLabel.textContent = name('X');
   scoreOLabel.textContent = name('O');
 }
+function setAiThinking(on) {
+  aiThinkingEl.textContent = on ? '🤖 AI is thinking…' : '';
+}
 
 /* ─── Check Win ──────────────────────────────────────────────── */
 function checkWin(b, mark) {
   return WIN_LINES.find(line => line.every(i => b[i] === mark)) || null;
 }
-
-/* ─── Check Draw ─────────────────────────────────────────────── */
 function checkDraw(b) { return b.every(v => v !== null); }
 
-/* ─── Cell Click Handler ─────────────────────────────────────── */
+/* ─── Cell Click ─────────────────────────────────────────────── */
 function onCellClick(e) {
   const idx = +e.currentTarget.dataset.index;
   if (gameOver || board[idx]) return;
-  // If AI is on and it's AI's turn, ignore human click
   if (aiEnabled && currentTurn === AI_MARK) return;
   makeMove(idx);
 }
 
-/* ─── Make a Move (human or AI) ─────────────────────────────── */
+/* ─── Make Move ──────────────────────────────────────────────── */
 function makeMove(idx) {
   if (gameOver || board[idx]) return;
-
   board[idx] = currentTurn;
   playPlace();
   renderBoard(idx);
@@ -630,46 +660,46 @@ function makeMove(idx) {
     gameOver = true;
     highlightWin(winLine);
     scores[currentTurn]++;
-    saveScores();
-    renderScores();
+    saveScores(); renderScores();
     playWin();
     updateStatus(`🎉 ${name(currentTurn)} wins!`, 'result');
     updateIndicators();
+    setAiThinking(false);
     return;
   }
   if (checkDraw(board)) {
     gameOver = true;
     scores.D++;
-    saveScores();
-    renderScores();
+    saveScores(); renderScores();
     playDraw();
     updateStatus(`🤝 It's a draw!`, 'result');
     updateIndicators();
+    setAiThinking(false);
     return;
   }
 
-  // Switch turn
   currentTurn = currentTurn === 'X' ? 'O' : 'X';
   updateStatus(`${name(currentTurn)}'s turn`, currentTurn === 'X' ? 'x-turn' : 'o-turn');
   updateIndicators();
 
-  // Trigger AI if needed
   if (aiEnabled && currentTurn === AI_MARK && !gameOver) {
-    setTimeout(aiMove, 380);
+    setAiThinking(true);
+    setTimeout(aiMove, 320);
   }
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   AI LOGIC
+   AI — Heuristic Threat-Based Engine
+   Strategy:
+     Hard   → deep threat scoring + look-ahead (2-ply minimax on top candidates)
+     Medium → threat scoring, occasional mistakes
+     Easy   → mostly random with basic block
    ═══════════════════════════════════════════════════════════════ */
 
-/** Return all empty cell indices */
-function emptyIndices(b) { return b.map((v,i) => v === null ? i : -1).filter(i => i !== -1); }
-
-/** AI picks a move based on difficulty */
 function aiMove() {
   if (gameOver) return;
   const idx = getAiMove();
+  setAiThinking(false);
   if (idx !== -1) makeMove(idx);
 }
 
@@ -677,105 +707,159 @@ function getAiMove() {
   switch (aiDifficulty) {
     case 'easy':   return easyMove();
     case 'medium': return mediumMove();
-    case 'hard':   return minimaxMove();
-    default:       return easyMove();
+    case 'hard':   return hardMove();
+    default:       return hardMove();
   }
 }
 
-/** Easy: random valid move */
+/* ── Easy: random, but block immediate wins 60% of the time ──── */
 function easyMove() {
+  const human = AI_MARK === 'O' ? 'X' : 'O';
+  if (Math.random() < 0.60) {
+    for (const i of emptyIndices(board)) {
+      const test = [...board]; test[i] = human;
+      if (checkWin(test, human)) return i;
+    }
+  }
   const empties = emptyIndices(board);
-  return empties.length ? empties[Math.floor(Math.random() * empties.length)] : -1;
+  return empties[Math.floor(Math.random() * empties.length)] ?? -1;
 }
 
-/** Medium: win or block if possible, else random */
+/* ── Medium: always win/block, heuristic 65% rest ─────────────── */
 function mediumMove() {
   const human = AI_MARK === 'O' ? 'X' : 'O';
-  // 1. Win if possible
   for (const i of emptyIndices(board)) {
-    const test = [...board]; test[i] = AI_MARK;
-    if (checkWin(test, AI_MARK)) return i;
+    const t = [...board]; t[i] = AI_MARK; if (checkWin(t, AI_MARK)) return i;
   }
-  // 2. Block human win
   for (const i of emptyIndices(board)) {
-    const test = [...board]; test[i] = human;
-    if (checkWin(test, human)) return i;
+    const t = [...board]; t[i] = human;   if (checkWin(t, human))   return i;
   }
-  // 3. Random (50 % chance to play strategically vs randomly)
-  if (Math.random() < 0.5) return strategicMove();
-  return easyMove();
+  if (Math.random() < 0.65) return scoredMove(board, AI_MARK);
+  const empties = emptyIndices(board);
+  return empties[Math.floor(Math.random() * empties.length)] ?? -1;
 }
 
-/** Prefer center > corners > edges */
-function strategicMove() {
-  const preferred = [4, 0, 2, 6, 8, 1, 3, 5, 7];
-  for (const i of preferred) if (board[i] === null) return i;
-  return easyMove();
+/* ── Hard: full heuristic + 2-ply minimax on top candidates ───── */
+function hardMove() {
+  const human = AI_MARK === 'O' ? 'X' : 'O';
+
+  // 1. Immediate win
+  for (const i of emptyIndices(board)) {
+    const t = [...board]; t[i] = AI_MARK; if (checkWin(t, AI_MARK)) return i;
+  }
+  // 2. Block immediate human win
+  for (const i of emptyIndices(board)) {
+    const t = [...board]; t[i] = human; if (checkWin(t, human)) return i;
+  }
+  // 3. Detect & play double-threat fork (own)
+  const fork = findFork(board, AI_MARK);
+  if (fork !== -1) return fork;
+  // 4. Block human fork
+  const humanFork = findFork(board, human);
+  if (humanFork !== -1) return humanFork;
+  // 5. 2-ply minimax on the top-8 heuristic-scored candidates
+  return twoPlyBest(board, AI_MARK);
 }
 
-/** Hard: minimax with alpha-beta pruning */
-function minimaxMove() {
+/* ─── Heuristic: score each empty cell ───────────────────────── */
+/**
+ * For each WIN_LINE passing through a cell, count how many of our marks
+ * and opponent marks are there. A line blocked by opponent is worthless.
+ * Score weights: 3-in-line >> 2-in-line >> 1-in-line >> center/corner bonus.
+ */
+const LINE_SCORE = { own: [0, 1, 10, 100, 100000], opp: [0, 1, 8, 80, 100000] };
+
+function evalCell(b, idx, mark) {
+  const opp = mark === 'X' ? 'O' : 'X';
+  let score = 0;
+  for (const li of CELL_LINES[idx]) {
+    const line = WIN_LINES[li];
+    let ownCount = 0, oppCount = 0;
+    for (const ci of line) {
+      if (b[ci] === mark) ownCount++;
+      else if (b[ci] === opp) oppCount++;
+    }
+    if (oppCount === 0) score += LINE_SCORE.own[ownCount];
+    if (ownCount === 0) score += LINE_SCORE.opp[oppCount] * 0.9; // slight discount for defensive value
+  }
+  // Center + near-center positional bonus
+  const r = Math.floor(idx / BOARD_SIZE), c = idx % BOARD_SIZE;
+  const centrality = (2 - Math.abs(r - 2)) + (2 - Math.abs(c - 2)); // 0–4
+  score += centrality * 2;
+  return score;
+}
+
+function scoredMove(b, mark) {
   let best = -Infinity, bestIdx = -1;
-  for (const i of emptyIndices(board)) {
-    board[i] = AI_MARK;
-    const score = minimax(board, 0, false, -Infinity, Infinity);
-    board[i] = null;
-    if (score > best) { best = score; bestIdx = i; }
+  for (const i of emptyIndices(b)) {
+    const s = evalCell(b, i, mark);
+    if (s > best) { best = s; bestIdx = i; }
   }
   return bestIdx;
 }
 
-/**
- * Minimax with alpha-beta pruning.
- * @param {Array}   b          - board state
- * @param {number}  depth      - recursion depth
- * @param {boolean} isMax      - maximising player?
- * @param {number}  alpha
- * @param {number}  beta
- */
-function minimax(b, depth, isMax, alpha, beta) {
-  const human = AI_MARK === 'O' ? 'X' : 'O';
-  if (checkWin(b, AI_MARK))  return 10 - depth;
-  if (checkWin(b, human))    return depth - 10;
-  if (checkDraw(b))          return 0;
-
-  const empties = emptyIndices(b);
-  if (isMax) {
-    let best = -Infinity;
-    for (const i of empties) {
-      b[i] = AI_MARK;
-      best = Math.max(best, minimax(b, depth + 1, false, alpha, beta));
-      b[i] = null;
-      alpha = Math.max(alpha, best);
-      if (beta <= alpha) break; // prune
+/* ─── Fork detection: find a move that creates 2+ open 3-in-lines */
+function findFork(b, mark) {
+  const opp = mark === 'X' ? 'O' : 'X';
+  for (const i of emptyIndices(b)) {
+    const test = [...b]; test[i] = mark;
+    // Count lines that now have 3-of-mark and are not blocked
+    let threats = 0;
+    for (const li of CELL_LINES[i]) {
+      const line = WIN_LINES[li];
+      let cnt = 0, blocked = false;
+      for (const ci of line) {
+        if (test[ci] === mark) cnt++;
+        else if (test[ci] === opp) { blocked = true; break; }
+      }
+      if (!blocked && cnt >= 3) threats++;
     }
-    return best;
-  } else {
-    let best = Infinity;
-    for (const i of empties) {
-      b[i] = human;
-      best = Math.min(best, minimax(b, depth + 1, true, alpha, beta));
-      b[i] = null;
-      beta = Math.min(beta, best);
-      if (beta <= alpha) break; // prune
-    }
-    return best;
+    if (threats >= 2) return i;
   }
+  return -1;
+}
+
+/* ─── 2-ply minimax on top N heuristic candidates ─────────────── */
+function twoPlyBest(b, mark) {
+  const opp = mark === 'X' ? 'O' : 'X';
+  const empties = emptyIndices(b);
+
+  // Score and sort all empties, take top 8
+  const scored = empties
+    .map(i => ({ i, s: evalCell(b, i, mark) }))
+    .sort((a, z) => z.s - a.s)
+    .slice(0, 8);
+
+  let best = -Infinity, bestIdx = scored[0]?.i ?? -1;
+
+  for (const { i } of scored) {
+    const b1 = [...b]; b1[i] = mark;
+    // Opponent's best reply (1-ply look-ahead)
+    let oppBest = -Infinity;
+    const oppEmpties = emptyIndices(b1).slice(0, 8); // limit for speed
+    for (const j of oppEmpties) {
+      const s = evalCell(b1, j, opp);
+      if (s > oppBest) oppBest = s;
+    }
+    // Our score = own heuristic − opponent's best reply value
+    const netScore = evalCell(b, i, mark) - oppBest * 0.8;
+    if (netScore > best) { best = netScore; bestIdx = i; }
+  }
+  return bestIdx;
 }
 
 /* ─── New Game ───────────────────────────────────────────────── */
 function newGame() {
-  board       = Array(9).fill(null);
+  board       = Array(CELLS).fill(null);
   gameOver    = false;
   currentTurn = firstPlayerSel.value;
-
+  setAiThinking(false);
   renderBoard();
   updateStatus(`${name(currentTurn)}'s turn`, currentTurn === 'X' ? 'x-turn' : 'o-turn');
   updateIndicators();
   renderScores();
-
-  // If AI goes first
   if (aiEnabled && currentTurn === AI_MARK) {
+    setAiThinking(true);
     setTimeout(aiMove, 500);
   }
 }
@@ -783,79 +867,68 @@ function newGame() {
 /* ─── Reset Scores ───────────────────────────────────────────── */
 function resetScores() {
   scores = { X: 0, O: 0, D: 0 };
-  saveScores();
-  renderScores();
+  saveScores(); renderScores();
+  newGame();
+}
+
+/* ─── Starts dropdown ────────────────────────────────────────── */
+function updateStartsDropdown() {
+  firstPlayerSel.options[0].textContent = name('X');
+  firstPlayerSel.options[1].textContent = name('O');
 }
 
 /* ─── Event Listeners ────────────────────────────────────────── */
-
 resetBtn.addEventListener('click', newGame);
+resetScoresBtn.addEventListener('click', () => { if (confirm('Reset all scores?')) resetScores(); });
 
-resetScoresBtn.addEventListener('click', () => {
-  if (confirm('Reset all scores?')) resetScores();
-});
-
-// Theme toggle
 themeBtn.addEventListener('click', () => {
-  const cur = document.documentElement.getAttribute('data-theme') || 'light';
+  const cur  = document.documentElement.getAttribute('data-theme') || 'light';
   const next = cur === 'dark' ? 'light' : 'dark';
   document.documentElement.setAttribute('data-theme', next);
   themeBtn.textContent = next === 'dark' ? '☀️' : '🌙';
   localStorage.setItem(LS_THEME, next);
 });
 
-// Mute toggle
 muteBtn.addEventListener('click', () => {
   muted = !muted;
   muteBtn.textContent = muted ? '🔇' : '🔊';
   localStorage.setItem(LS_MUTED, muted ? '1' : '0');
 });
 
-// AI toggle
 aiToggle.addEventListener('change', () => {
   aiEnabled = aiToggle.checked;
   diffWrap.style.display = aiEnabled ? 'flex' : 'none';
-  // When AI is on, O is always AI; update label
-  nameOInput.disabled = aiEnabled;
+  nameOInput.disabled    = aiEnabled;
   if (aiEnabled) {
     nameOInput.value = 'AI';
   } else {
     nameOInput.value = 'Player O';
-    loadNames(); // restore saved name
+    loadNames();
   }
+  updateStartsDropdown();
   renderScores();
   newGame();
 });
 
-// Difficulty change
-difficultySel.addEventListener('change', () => {
-  aiDifficulty = difficultySel.value;
-  newGame();
-});
+difficultySel.addEventListener('change', () => { aiDifficulty = difficultySel.value; newGame(); });
 
-// Player name changes → debounced save + re-render labels
 let nameDebounce;
 [nameXInput, nameOInput].forEach(inp => {
   inp.addEventListener('input', () => {
     clearTimeout(nameDebounce);
     nameDebounce = setTimeout(() => {
-      saveNames();
-      renderScores();
-      updateIndicators();
+      saveNames(); renderScores(); updateIndicators(); updateStartsDropdown();
       updateStatus(`${name(currentTurn)}'s turn`, currentTurn === 'X' ? 'x-turn' : 'o-turn');
     }, 300);
   });
 });
 
-// First-player selector
 firstPlayerSel.addEventListener('change', newGame);
 
-/* ─── Initialise ─────────────────────────────────────────────── */
+/* ─── Init ───────────────────────────────────────────────────── */
 (function init() {
-  loadTheme();
-  loadMuted();
-  loadScores();
-  loadNames();
+  loadTheme(); loadMuted(); loadScores(); loadNames();
+  updateStartsDropdown();
   buildBoard();
   newGame();
 })();
